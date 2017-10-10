@@ -1,0 +1,35 @@
+{
+  "name": "dbrest",
+  "version": "0.0.1",
+  "description": "DBRest simplifies the publishing of rest API from (very) simple SQL Models.",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc ava"
+  },
+  "author": {
+    "name": "Danilo Sampaio",
+    "email": "danilo.sampaio@gmail.com",
+    "url": "github.org/danilosampaio"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.17.1",
+    "pg": "^6.1.2",
+    "tedious": "^1.14.0",
+    "tedious-connection-pool": "^1.0.5"
+  },
+  "keywords": [
+    "rest",
+    "api",
+    "sql",
+    "model",
+    "postgresql",
+    "mssql"
+  ],
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "express": "^4.15.0",
+    "nyc": "^10.1.2",
+    "xo": "^0.17.1"
+  }
+}

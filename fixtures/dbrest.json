@@ -1,0 +1,21 @@
+{
+	"postgresql": {
+		"user": "postgres",
+		"password": "postgres",
+		"server": "localhost",
+		"port": "5432",
+		"database": "fractal",
+		"max": 10,
+		"idleTimeoutMillis": 30000
+	},
+	"mssql": {
+		"userName": "sa",
+		"password": "1qaz!QAZ",
+		"server": "10.85.227.44",
+		"options": {
+		  "database": "CQ",
+		  "instanceName": "SQLEXPRESS",
+		  "rowCollectionOnRequestCompletion": true
+		}
+	}
+}
