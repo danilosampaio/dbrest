@@ -1,6 +1,7 @@
 const path = require('path');
 const Database = require('./lib/database');
 const Models = require('./lib/models');
+const Model = require('./lib/Model')
 
 /**
  * The main classe of DBRest module.
@@ -25,6 +26,8 @@ function DBRest(params) {
 	this.modelsDir = params && params.modelsDir ? params.modelsDir : path.join(__dirname, '../../models/');
 	this.database = new Database(this.dialect, this.options);
 }
+
+DBRest.Model = Model;
 
 /**
  * The init method creates a database connection, instatiate the models located at 'modelsDir', and creates a rest API

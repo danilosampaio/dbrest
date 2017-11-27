@@ -1,17 +1,32 @@
 {
-  "name": "dbrest",
-  "version": "0.0.2",
-  "description": "DBRest simplifies the publishing of rest API from (very) simple SQL Models.",
-  "main": "index.js",
-  "scripts": {
-    "test": "nyc ava"
+  "_from": "github:danilosampaio/dbrest",
+  "_id": "dbrest@0.0.2",
+  "_inBundle": false,
+  "_integrity": "sha1-Nh3VE77KulAL/2pXmmzTUNXYCE0=",
+  "_location": "/dbrest",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "dbrest@github:danilosampaio/dbrest",
+    "name": "dbrest",
+    "escapedName": "dbrest",
+    "rawSpec": "github:danilosampaio/dbrest",
+    "saveSpec": "github:danilosampaio/dbrest",
+    "fetchSpec": null,
+    "gitCommittish": "master"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "github:danilosampaio/dbrest#37cc6b94d641848dacd81d8c9a73d571ea4ebd18",
+  "_spec": "dbrest@github:danilosampaio/dbrest",
+  "_where": "C:\\Users\\jdansilv\\Documents\\danilo\\fractal",
   "author": {
     "name": "Danilo Sampaio",
     "email": "danilo.sampaio@gmail.com",
     "url": "github.org/danilosampaio"
   },
-  "license": "MIT",
+  "bundleDependencies": false,
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
@@ -21,7 +36,15 @@
     "simple-sql-parser": "^2.0.0-alpha.1",
     "stringify-object": "^3.2.1",
     "tedious": "^1.14.0",
-    "tedious-connection-pool": "^1.0.5"    
+    "tedious-connection-pool": "^1.0.5"
+  },
+  "deprecated": false,
+  "description": "DBRest simplifies the publishing of rest API from (very) simple SQL Models.",
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "express": "^4.15.0",
+    "nyc": "^10.1.2",
+    "xo": "^0.17.1"
   },
   "keywords": [
     "rest",
@@ -31,10 +54,11 @@
     "postgresql",
     "mssql"
   ],
-  "devDependencies": {
-    "ava": "^0.18.2",
-    "express": "^4.15.0",
-    "nyc": "^10.1.2",
-    "xo": "^0.17.1"
-  }
+  "license": "MIT",
+  "main": "index.js",
+  "name": "dbrest",
+  "scripts": {
+    "test": "nyc ava"
+  },
+  "version": "0.0.2"
 }
