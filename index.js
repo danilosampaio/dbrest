@@ -1,12 +1,12 @@
 const path = require('path');
 const Database = require('./lib/database');
-const Models = require('./lib/models');
 const Model = require('./lib/Model')
+const Restify = require('./lib/restify');
 
 /**
- * The main classe of DBRest module.
+ * The main classe of dbrest module.
  * @constructor
- * @param {json} params - The params used to instatiate database connection, create express routes, etc.
+ * @param {json} params - database connection options, dialect, and models directory.
  * @params.dialect: {string} dialect - 'postgresql' | 'mssql'
  * @params.options: {json} options - database connection options. Ex: 
  *		{
@@ -25,30 +25,24 @@ function DBRest(params) {
 	this.options = params && params.options ? params.options : null;
 	this.modelsDir = params && params.modelsDir ? params.modelsDir : path.join(__dirname, '../../models/');
 	this.database = new Database(this.dialect, this.options);
+	this.restify = new Restify(this.database, this.modelsDir);
 }
 
+/**
+ * Model import helper.
+ * Ex: const Model = require('dbrest').Model
+ */
 DBRest.Model = Model;
 
 /**
- * The init method creates a database connection, instatiate the models located at 'modelsDir', and creates a rest API
- * for each model.
+ * The init method creates a database connection, instatiate the models located at 'modelsDir',
+ * and creates a rest API for each model.
  * @router {object} router - The express Router instance.
  * @authentication: {function} authentication - the authentication function (express middleware function).
- * @onLoadModel: {function} onLoadModel - a function that is called always a model is loaded. Signature: function(file, Model){}. 
- * @cb: {function} cb - The callback function called when init method finish.
  */
-DBRest.prototype.init = function (router, authentication, onLoadModel, events, cb) {
-	this.database.createPool(err => {
-		if (err) {
-			cb(err);
-			return;
-		}
-
-		this.models = new Models(this.database, this.modelsDir, events);
-		this.models.restify(router, authentication, onLoadModel);
-
-		cb();
-	});
+DBRest.prototype.init = async function (router, authentication) {
+	await this.database.createPool();
+	this.restify.publish(router, authentication);
 };
 
 module.exports = DBRest;
