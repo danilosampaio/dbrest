@@ -28,23 +28,23 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "body-parser": "^1.17.1",
+    "body-parser": "^1.18.3",
     "express": "^4.15.2",
-    "lodash": "^4.17.4",
-    "moment": "^2.17.1",
-    "pg": "^6.1.2",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "pg": "^7.4.3",
     "simple-sql-parser": "^2.0.0-alpha.1",
-    "stringify-object": "^3.2.1",
-    "tedious": "^1.14.0",
+    "stringify-object": "^3.2.2",
+    "tedious": "^2.6.4",
     "tedious-connection-pool": "^1.0.5"
   },
   "deprecated": false,
   "description": "DBRest simplifies the publishing of rest API from (very) simple SQL Models.",
   "devDependencies": {
-    "ava": "^0.18.2",
-    "express": "^4.15.0",
-    "nyc": "^10.1.2",
-    "xo": "^0.17.1"
+    "ava": "^0.25.0",
+    "express": "^4.16.3",
+    "nyc": "^12.0.2",
+    "xo": "^0.22.0"
   },
   "keywords": [
     "rest",
