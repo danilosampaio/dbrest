@@ -1,0 +1,12 @@
+{
+	"mssql": {
+		"userName": "<username>",
+		"password": "<password>",
+		"server": "<serverAddress>",
+		"options": {
+		  "database": "<databasename>",
+		  "instanceName": "<instancename>",
+		  "rowCollectionOnRequestCompletion": true
+		}
+	}
+}
