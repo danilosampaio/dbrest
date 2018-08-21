@@ -19,31 +19,30 @@ $ npm install --save dbrest
 > Define a model:
 ```js
 //Considering there is a table/view in your database named 'Foo', that's all!
-function Foo() {
+const Model = require('dbrest').Model;
 
+class Foo extends Model {
+    
 }
+
 module.exports = Foo;
 ```
 
 
 > Attach the rest API to the express app:
 ```js
-var DBRest  = require('dbrest');
-var dbrest = new DBRest();
+const DBRest = require('dbrest');
+const dbrest = new DBRest({
+    'dialect': 'mssql',
+    'modelsDir': 'models'
+});
 
-dbrest.init(
-	router /* express.Router() */, 
-	null /* optional authentication function */, 
-	null /* optional onLoadModel function */, 
-	function(err){ /* callback */
-		if (err) {
-			console.log(err);
-		}
-	}
-);
+await dbrest.init(router);
+app.use('/', router);
 ```
 
-> It's Done! see the result at _(server)_/foo
+> It's Done! DBRest will generate the CRUD REST API: /foo, /insertfoo, /updatefoo, deletefoo.
+> See the result of GET method at _(server)_/foo
 ```js
 {
    "columns": [
@@ -76,7 +75,7 @@ dbrest.init(
 
 ## API
 
-### init(router, authentication, onLoadModel, cb)
+### init(router, authentication)
 
 #### router
 
@@ -96,25 +95,6 @@ function(req, res, next){
 	
 }
 ```
-
-#### onLoadModel
-
-*Optional*
-Type: `function`  
-
-Function that is called always a model is loaded. Signature:
-```js
-function(file, Model){
-	//file: 'foo.js'
-	//Model: Foo (class)
-}
-```
-
-#### cb
-
-Type: `function`  
-
-The callback function called when init method finish.
 
 
 ## License
