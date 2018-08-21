@@ -23,7 +23,7 @@ const Restify = require('./lib/restify');
 function DBRest(params) {
 	this.dialect = params && params.dialect ? params.dialect : 'postgresql';
 	this.options = params && params.options ? params.options : null;
-	this.modelsDir = params && params.modelsDir ? params.modelsDir : path.join(__dirname, '../../models/');
+	this.modelsDir = params && params.modelsDir ? path.join(process.cwd(), params.modelsDir) : path.join(process.cwd(), 'models');
 	this.database = new Database(this.dialect, this.options);
 	this.restify = new Restify(this.database, this.modelsDir);
 }
