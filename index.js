@@ -27,7 +27,8 @@ class DBRest {
 		this.dialect = params && params.dialect ? params.dialect : 'postgresql';
 		this.options = params && params.options ? params.options : null;
 		this.modelsDir = params && params.modelsDir ? path.join(process.cwd(), params.modelsDir) : path.join(process.cwd(), 'models');
-		this.restify = new Restify(this.database, this.modelsDir);
+		this.prefix = params && params.api_prefix ? params.api_prefix : null;
+		this.restify = new Restify(this.database, this.modelsDir, this.prefix);
 	}
 
 	/**
