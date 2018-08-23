@@ -42,36 +42,39 @@ class DBRest {
 	/**
 	 * Recursively loads models from 'modelsDir' directory.
 	 */
-	async loadModels () {
-		const files = fs.readdirSync(this.modelsDir, 'utf8');
+	async loadFrom (modelsDir) {
+		const files = fs.readdirSync(modelsDir, 'utf8');
 
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
-			const url = path.basename(file, '.js').toLowerCase();
-			const Model = require(path.join(this.modelsDir, file));
-			this.models[url] = new Model(this.database);;
+			const Model = require(path.join(modelsDir, file));
+			this.loadModel(Model);
 		}
+	}
+
+	loadModel (Model) {
+		const model = new Model(this.database);
+		const name = model.constructor.name;
+		this.models[name] = model;
 	}
 
 	/**
 	 * Publish REST API for each Model.
-	 * @param {Router} router 
-	 * @param {Function} authentication 
+	 * @param {Function} middleware 
 	 */
-	publish (router, authentication) {
-		this.restify.publish(this.models, router, authentication);
+	publish (middleware) {
+		return this.restify.publish(this.models, middleware);
 	}
 
 	/**
 	 * The init method creates a database connection, instatiate the models located at 'modelsDir',
 	 * and creates a rest API for each model.
-	 * @router {object} router - The express Router instance.
-	 * @authentication: {function} authentication - the authentication function (express middleware function).
+	 * @middleware: {function} middleware - the middleware function (express middleware function).
 	 */
-	async init (router, authentication) {
+	async init (middleware) {
 		await this.connect();
-		await this.loadModels();
-		await this.publish(router, authentication);
+		await this.loadFrom(this.modelsDir);
+		return await this.publish(middleware);
 	}
 }
 
