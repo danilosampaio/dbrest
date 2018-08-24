@@ -1,9 +1,4 @@
-# DBRest [![Build Status](https://travis-ci.org/danilosampaio/dbrest.svg?branch=master)](https://travis-ci.org/danilosampaio/dbrest)
-
-> DBRest simplifies the publishing of rest API from simple SQL Models.
-Supported databases: postgresql and mssql.
-
-## In development, don't use it yet.
+# [![DBRest](assets/greeting.png)](assets/greeting.png)
 
 
 ## Install
@@ -13,88 +8,85 @@ $ npm install --save dbrest
 ```
 
 
-## Usage
+## Connection
+> Supported databases: Postgresql and MSSQL.
 
-
-> Define a model:
-```js
-//Considering there is a table/view in your database named 'Foo', that's all!
-const Model = require('dbrest').Model;
-
-class Foo extends Model {
-    
-}
-
-module.exports = Foo;
-```
-
-
-> Attach the rest API to the express app:
 ```js
 const DBRest = require('dbrest');
 const dbrest = new DBRest({
-    'dialect': 'mssql',
-    'modelsDir': 'models'
+    'dialect': 'postgresql',
+    'server': 'localhost',
+    'port': '5432',
+    'database': 'dbrest',
+    'user': 'postgres',
+    'password': 'postgres'
 });
+await dbrest.connect();
+```
 
-await dbrest.init(router);
+## Database table example
+
+[![Task](assets/task.png)](assets/task.png)
+
+
+## Define your 
+> For a basic example, just create a class that extends `Model`.
+
+```js
+const Model = require('dbrest').Model;
+
+class Foo extends Model {}
+
+dbrest.loadModel(Foo);
+const router = dbrest.publish();
+
+//attach dbrest routes to your express app
 app.use('/', router);
 ```
 
-> It's Done! DBRest will generate the CRUD REST API: /foo, /insertfoo, /updatefoo, deletefoo.
-> See the result of GET method at _(server)_/foo
-```js
-{
-   "columns": [
-      {
-         "name":"id",
-         "label":"Id",
-         "type":"text",
-         "readOnly":true,
-         ...
-      },
-      {
-         ...
-      }
-   ],
-   "rows":[
-      {
-         "id":666,
-         "name":"John",
-         ...
-      },
-      {
-      	...
-      }
-   ],
-   "title":"Foo",
-   "primaryKey":"id",
-   ...
-}
-```
+## Result
+> It creates a REST API for CRUD operations.
+
+Verb | Operation | Route
+------------ | ------------- | -------------
+HTTP / GET | get tasks from database. | /task
+HTTP / POST | insert a task | /task
+HTTP / PUT | update a task | /task
+HTTP / DELETE | delete a task | /task
+
+> Aditional methods
+
+Verb | Operation | Route
+------------ | ------------- | -------------
+HTTP / GET | get task schema | /task/define
+HTTP / GET | get task schema and data | /task/fetch
+
 
 ## API
 
-### init(router, authentication)
+### connect
 
-#### router
+Connect to database and create a connections pool.
+
+
+### loadModel(model)
+
+#### model
 
 *Required*  
 Type: `Object`
 
-The express Router - express.Router();
+Javascript class that extends Model.
 
-#### authentication
+
+### publish(middleware)
+
+#### middleware
 
 *Optional*
 Type: `function`  
 
-Express middleware function. Signature:
-```js
-function(req, res, next){
-	
-}
-```
+Express middleware function.
 
 
 ## License
