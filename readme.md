@@ -29,7 +29,7 @@ await dbrest.connect();
 [![Task](assets/task.png)](assets/task.png)
 
 
-## Define your 
+## Define your Model
 > For a basic example, just create a class that extends `Model`.
 
 ```js
@@ -47,24 +47,91 @@ app.use('/', router);
 ## Result
 > It creates a REST API for CRUD operations.
 
-Verb | Operation | Route
+HTTP Verb | Operation | Route
 ------------ | ------------- | -------------
-HTTP / GET | get tasks from database. | /task
-HTTP / POST | insert a task | /task
-HTTP / PUT | update a task | /task
-HTTP / DELETE | delete a task | /task
+GET | get tasks from database. | /task
+POST | insert a task | /task
+PUT | update a task | /task
+DELETE | delete a task | /task
 
 > Aditional methods
 
-Verb | Operation | Route
+HTTP Verb | Operation | Route
 ------------ | ------------- | -------------
-HTTP / GET | get task schema | /task/define
-HTTP / GET | get task schema and data | /task/fetch
+GET | get task schema | /task/define
+GET | get task schema and data | /task/fetch
 
+
+## Customize Model methods (find, insert, update, delete)
+> let's see how to re-define the default methods
+
+##### find
+```js
+class Task extends Model {
+
+	//re-define find to add a calculated column `foo`.
+	async find (params) {
+
+		//`addWhereExpress` helps to generate `where` expression based on the request params 
+		const statement = this.addWhereExpress(
+			`select id, title, status, 'foo' as calculated from Task`,
+			params
+		);
+		
+		return await this.database.query(statement);
+	}
+}
+```
+
+##### insert
+```js
+class Task extends Model {
+
+	//re-define insert to validate params
+	async insert (params) {
+
+		if (params.status != 'backlog') {
+			throw new ModelError("a new task must be created with status 'backlog'.")
+		}
+
+		super.insert(param);
+	}
+}
+```
+
+##### update
+```js
+class Task extends Model {
+
+	//re-define update to log changes in console
+	async update (params) {
+
+		console.log('[UPDATED] - ' + params);
+		super.update(params);
+	}
+}
+```
+
+##### delete
+```js
+class Task extends Model {
+
+	//re-define delete to validate references
+	async delete (params) {
+		const id = params.id;
+		const reference = await this.database.query(`select id from event where taskId = ${id}`);
+		if (reference) {
+			throw new ModelError('this record is referenced by ' + reference.id);
+		}
+
+		super.delete(params);
+	}
+}
+```
 
 ## API
 
-### connect
+### connect()
 
 Connect to database and create a connections pool.
 
@@ -77,6 +144,16 @@ Connect to database and create a connections pool.
 Type: `Object`
 
 Javascript class that extends Model.
+
+
+### loadFrom(modelsDir)
+
+#### modelsDir
+
+*Required*
+Type: `String`
+
+Directory path containing the Models.
 
 
 ### publish(middleware)
