@@ -35,9 +35,9 @@ await dbrest.connect();
 ```js
 const Model = require('dbrest').Model;
 
-class Foo extends Model {}
+class Task extends Model {}
 
-dbrest.loadModel(Foo);
+dbrest.loadModel(Task);
 const router = dbrest.publish();
 
 //attach dbrest routes to your express app
