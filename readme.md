@@ -166,6 +166,11 @@ Type: `function`
 Express middleware function.
 
 
+## Warning
+
+This project is in development, so be careful and don't use it in production yet. 
+
+
 ## License
 
 MIT © [Danilo Sampaio](http://github.org/danilosampaio)
