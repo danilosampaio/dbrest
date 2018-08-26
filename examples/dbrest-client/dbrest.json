@@ -1,5 +1,27 @@
+/*
+	postgresql connection example
+*/
 {
-	"mssql": {
+	"dialect": "postgresql",
+	"connection": {
+		"dialect": "postgresql",
+		"server": "localhost",
+		"port": "5432",
+		"database": "postgres",
+		"user": "postgres",
+		"password": "postgres"
+	},
+	"modelsDir": "models",
+	"prefix": "dbrest"
+}
+
+/*
+	mssql connection example
+*/
+/*
+{
+	"dialect": "mssql",
+	"connection": {
 		"userName": "<username>",
 		"password": "<password>",
 		"server": "<serverAddress>",
@@ -8,5 +30,8 @@
 		  "instanceName": "<instancename>",
 		  "rowCollectionOnRequestCompletion": true
 		}
-	}
+	},
+	"modelsDir": "models",
+	"prefix": "dbrest"
 }
+*/

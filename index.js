@@ -23,19 +23,19 @@ const Restify = require('./lib/restify');
  */
 class DBRest {
 	constructor (params) {
+		this.config = params || JSON.parse(fs.readFileSync(path.join(process.cwd(), 'dbrest.json'), 'utf8')) || {};
 		this.models = {};
-		this.dialect = params && params.dialect ? params.dialect : 'postgresql';
-		this.options = params && params.options ? params.options : null;
-		this.modelsDir = params && params.modelsDir ? path.join(process.cwd(), params.modelsDir) : path.join(process.cwd(), 'models');
-		this.prefix = params && params.api_prefix ? params.api_prefix : null;
-		this.restify = new Restify(this.database, this.modelsDir, this.prefix);
+		this.dialect = this.config.dialect ? this.config.dialect : 'postgresql';
+		this.connectionParams = this.config.connection ? this.config.connection : null;
+		this.modelsDir = this.config.modelsDir ? path.join(process.cwd(), this.config.modelsDir) : path.join(process.cwd(), 'models');
+		this.prefix = this.config.api_prefix ? this.config.api_prefix : null;
 	}
 
 	/**
 	 * Connect to database and create a connections pool
 	 */
 	async connect () {
-		this.database = new Database(this.dialect, this.options);
+		this.database = new Database(this.dialect, this.connectionParams);
 		await this.database.createPool();
 	}
 
@@ -63,6 +63,10 @@ class DBRest {
 	 * @param {Function} middleware 
 	 */
 	publish (middleware) {
+		if (!this.restify) {
+			this.restify = new Restify(this.prefix);
+		}
+
 		return this.restify.publish(this.models, middleware);
 	}
 

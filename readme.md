@@ -15,11 +15,13 @@ $ npm install --save dbrest
 const DBRest = require('dbrest');
 const dbrest = new DBRest({
     'dialect': 'postgresql',
-    'server': 'localhost',
-    'port': '5432',
-    'database': 'dbrest',
-    'user': 'postgres',
-    'password': 'postgres'
+    'connection': {
+	    'server': 'localhost',
+	    'port': '5432',
+	    'database': 'dbrest',
+	    'user': 'postgres',
+	    'password': 'postgres'
+	}
 });
 await dbrest.connect();
 ```
@@ -128,6 +130,26 @@ class Task extends Model {
 	}
 }
 ```
+
+
+## MSSQL connection example
+
+```js
+const dbrest = new DBRest({
+	"dialect": "mssql",
+	"connection": {
+		"userName": "admin",
+		"password": "admin",
+		"server": "localhost",
+		"options": {
+		  "database": "MyDB",
+		  "instanceName": "SQLSERVEREXPRESS",
+		  "rowCollectionOnRequestCompletion": true
+		}
+	}
+});
+```
+
 
 ## API
 
