@@ -1,32 +1,20 @@
 import test from 'ava';
-import express from 'express';
-import DBRest from './index';
+import {DBRest} from '.';
 
-var dbrest = null;
-
-test.before(t => {
-	dbrest = new DBRest({
-		options: {
-			"postgresql": {
-				"user": "postgres",
-				"password": "postgres",
-				"server": "localhost",
-				"port": "5432",
-				"database": "fractal",
-				"max": 10,
-				"idleTimeoutMillis": 30000
-			}
+test('DBRest', t => {
+	const dbrest = new DBRest({
+		dialect: 'postgresql',
+		connection: {
+			dialect: 'postgresql',
+			server: 'localhost',
+			port: '5432',
+			database: 'postgres',
+			user: 'postgres',
+			password: 'postgres'
 		},
-		modelsDir: './fixtures/models/'
+		modelsDir: 'examples/dbrest-client/models',
+		prefix: 'dbrest'
 	});
 
-	dbrest.init(express.Router(), null, function(err){
-		if (err) {
-			console.log(err);
-		}
-	});
-});
-
-test(t => {
-	console.log('dbrest' + dbrest)
+	t.is(typeof dbrest, 'object');
 });

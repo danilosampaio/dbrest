@@ -1,6 +1,3 @@
-/*
-	postgresql connection example
-*/
 {
 	"dialect": "postgresql",
 	"connection": {
@@ -14,24 +11,3 @@
 	"modelsDir": "models",
 	"prefix": "dbrest"
 }
-
-/*
-	mssql connection example
-*/
-/*
-{
-	"dialect": "mssql",
-	"connection": {
-		"userName": "<username>",
-		"password": "<password>",
-		"server": "<serverAddress>",
-		"options": {
-		  "database": "<databasename>",
-		  "instanceName": "<instancename>",
-		  "rowCollectionOnRequestCompletion": true
-		}
-	},
-	"modelsDir": "models",
-	"prefix": "dbrest"
-}
-*/

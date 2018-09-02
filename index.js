@@ -1,28 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const Database = require('./lib/database');
-const Model = require('./lib/Model')
+const Model = require('./lib/model');
 const Restify = require('./lib/restify');
 
-/**
- * The main classe of dbrest module.
- * @constructor
- * @param {json} params - database connection options, dialect, and models directory.
- * @params.dialect: {string} dialect - 'postgresql' | 'mssql'
- * @params.options: {json} options - database connection options. Ex: 
- *		{
- *			"user": "postgres",
- *			"password": "postgres",
- *			"server": "localhost",
- *			"port": "5432",
- *			"database": "MyDB",
- *			"max": 10,
- *			"idleTimeoutMillis": 30000
- *		}
- * @params.modelsDir: {string} modelsDir - The directory where the models reside. default: <__dirname>/models
- */
+/*
+	The main classe of dbrest module.
+*/
 class DBRest {
-	constructor (params) {
+	constructor(params) {
 		this.config = params || JSON.parse(fs.readFileSync(path.join(process.cwd(), 'dbrest.json'), 'utf8')) || {};
 		this.models = {};
 		this.dialect = this.config.dialect ? this.config.dialect : 'postgresql';
@@ -31,18 +17,18 @@ class DBRest {
 		this.prefix = this.config.api_prefix ? this.config.api_prefix : null;
 	}
 
-	/**
-	 * Connect to database and create a connections pool
-	 */
-	async connect () {
+	/*
+		Connect to database and create a connections pool
+	*/
+	async connect() {
 		this.database = new Database(this.dialect, this.connectionParams);
 		await this.database.createPool();
 	}
 
-	/**
-	 * Recursively loads models from 'modelsDir' directory.
-	 */
-	async loadFrom (modelsDir) {
+	/*
+		Recursively loads models from 'modelsDir' directory.
+	*/
+	async loadFrom(modelsDir) {
 		const files = fs.readdirSync(modelsDir, 'utf8');
 
 		for (let i = 0; i < files.length; i++) {
@@ -52,17 +38,19 @@ class DBRest {
 		}
 	}
 
-	loadModel (Model) {
+	/*
+		Load a model from class.
+	*/
+	loadModel(Model) {
 		const model = new Model(this.database);
-		const name = model.constructor.name;
+		const {name} = model.constructor;
 		this.models[name] = model;
 	}
 
-	/**
-	 * Publish REST API for each Model.
-	 * @param {Function} middleware 
-	 */
-	publish (middleware) {
+	/*
+		Publish each Model on the express Router.
+	*/
+	publish(middleware) {
 		if (!this.restify) {
 			this.restify = new Restify(this.prefix);
 		}
@@ -70,22 +58,18 @@ class DBRest {
 		return this.restify.publish(this.models, middleware);
 	}
 
-	/**
-	 * The init method creates a database connection, instatiate the models located at 'modelsDir',
-	 * and creates a rest API for each model.
-	 * @middleware: {function} middleware - the middleware function (express middleware function).
-	 */
-	async init (middleware) {
+	/*
+		The init method creates a database connection, instatiate the models located at 'modelsDir',
+		and creates a rest API for each model.
+	*/
+	async init(middleware) {
 		await this.connect();
 		await this.loadFrom(this.modelsDir);
-		return await this.publish(middleware);
+		return this.publish(middleware);
 	}
 }
 
-/**
- * Model import helper.
- * Ex: const Model = require('dbrest').Model
- */
-DBRest.Model = Model;
-
-module.exports = DBRest;
+module.exports = {
+	DBRest,
+	Model
+};

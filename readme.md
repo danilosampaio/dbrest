@@ -12,15 +12,15 @@ $ npm install --save dbrest
 > Supported databases: Postgresql and MSSQL.
 
 ```js
-const DBRest = require('dbrest');
+const {DBRest, Model} = require('dbrest');
 const dbrest = new DBRest({
-    'dialect': 'postgresql',
-    'connection': {
-	    'server': 'localhost',
-	    'port': '5432',
-	    'database': 'dbrest',
-	    'user': 'postgres',
-	    'password': 'postgres'
+    dialect: 'postgresql',
+    connection: {
+	    server: 'localhost',
+	    port: '5432',
+	    database: 'dbrest',
+	    user: 'postgres',
+	    password: 'postgres'
 	}
 });
 await dbrest.connect();
@@ -35,8 +35,6 @@ await dbrest.connect();
 > For a basic example, just create a class that extends `Model`.
 
 ```js
-const Model = require('dbrest').Model;
-
 class Task extends Model {}
 
 dbrest.loadModel(Task);
@@ -136,15 +134,15 @@ class Task extends Model {
 
 ```js
 const dbrest = new DBRest({
-	"dialect": "mssql",
-	"connection": {
-		"userName": "admin",
-		"password": "admin",
-		"server": "localhost",
-		"options": {
-		  "database": "MyDB",
-		  "instanceName": "SQLSERVEREXPRESS",
-		  "rowCollectionOnRequestCompletion": true
+	dialect: 'mssql',
+	connection: {
+		userName: 'admin',
+		password: 'admin',
+		server: 'localhost',
+		options: {
+		  database: 'MyDB',
+		  instanceName: 'SQLSERVEREXPRESS',
+		  rowCollectionOnRequestCompletion: true
 		}
 	}
 });
