@@ -2,5 +2,9 @@ language: node_js
 node_js:
   - '10'
   - '8'
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database postgres;' -U postgres -W postgres
 after_script:
-  - './node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov && ./node_modules/.bin/codecov'<% } %>
+  - './node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov && ./node_modules/.bin/codecov'
