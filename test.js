@@ -1,7 +1,7 @@
 import test from 'ava';
 import {DBRest} from '.';
 
-test('DBRest', t => {
+test('DBRest', async t => {
 	const dbrest = new DBRest({
 		dialect: 'postgresql',
 		connection: {
@@ -16,5 +16,7 @@ test('DBRest', t => {
 		prefix: 'dbrest'
 	});
 
+	await dbrest.connect();
 	t.is(typeof dbrest, 'object');
+	await dbrest.disconnect();
 });

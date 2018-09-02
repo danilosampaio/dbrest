@@ -20,9 +20,16 @@ class DBRest {
 	/*
 		Connect to database and create a connections pool
 	*/
-	async connect() {
+	connect() {
 		this.database = new Database(this.dialect, this.connectionParams);
-		await this.database.createPool();
+		return this.database.createPool();
+	}
+
+	/*
+		Close database connection.
+	*/
+	disconnect() {
+		this.database.disconnect();
 	}
 
 	/*
