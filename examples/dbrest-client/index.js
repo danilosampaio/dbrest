@@ -1,5 +1,4 @@
-import {DBRest} from 'dbrest';
-
+const {DBRest} = require('dbrest');
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');

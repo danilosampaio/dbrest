@@ -74,6 +74,27 @@ class DBRest {
 		await this.loadFrom(this.modelsDir);
 		return this.publish(middleware);
 	}
+
+	/*
+		Begin database transaction.
+	*/
+	beginTransaction() {
+		return this.database.beginTransaction();
+	}
+
+	/*
+		Commit database transaction.
+	*/
+	commitTransaction() {
+		this.database.commitTransaction();
+	}
+
+	/*
+		Rollback database transaction.
+	*/
+	rollbackTransaction() {
+		this.database.rollbackTransaction();
+	}
 }
 
 module.exports = {
