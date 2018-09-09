@@ -2,6 +2,22 @@ import test from 'ava';
 import {DBRest} from '.';
 
 let dbrest = null;
+const template = {/* eslint-disable camelcase */
+	col_bigint: 1,
+	col_bit: '101',
+	col_boolean: true,
+	col_character: 'X',
+	col_character_varying: 'Create a REST API from your database models.',
+	col_date: '2018-09-07',
+	col_double_precision: 1.99999,
+	col_money: 1.99999,
+	col_numeric: 1.99999,
+	col_real: 1.99999,
+	col_smallint: 12345,
+	col_text: 'Simple, Cross-database, and fast.',
+	col_time_with_time_zone: '00:00:00+1459',
+	col_timestamp_with_time_zone: '2018-09-07 00:00:00+03'
+};
 
 test.before('Connecting to database and load models from directory', async () => {
 	dbrest = new DBRest({
@@ -10,7 +26,7 @@ test.before('Connecting to database and load models from directory', async () =>
 			dialect: 'postgresql',
 			server: 'localhost',
 			port: '5432',
-			database: 'postgres',
+			database: 'dbrest',
 			user: 'postgres',
 			password: 'postgres'
 		},
@@ -21,73 +37,50 @@ test.before('Connecting to database and load models from directory', async () =>
 	await dbrest.init();
 });
 
-test('Insert, Find, Update, and Delete Project', async t => {
-	const {Project} = dbrest.models;
-	const inserted = await Project.insert({
-		name: 'DBRest',
-		description: 'Create a REST API from your dataabse models.'
-	});
-	let projects = await Project.find({
+test('Insert, Find, Update, and Delete record', async t => {
+	const {DBRest} = dbrest.models;
+	const inserted = await DBRest.insert(template);
+	let records = await DBRest.find({
 		id: inserted.id
 	});
-	t.is(projects.length, 1);
-	t.is(projects[0].name, 'DBRest');
+	t.is(records.length, 1);
+	t.is(records[0].col_character, 'X');
 
-	projects[0].name = 'DBRest 0__0';
-	await Project.update(projects[0]);
+	records[0].col_character = 'Y';
+	await DBRest.update(records[0]);
 
-	projects = await Project.find({
+	records = await DBRest.find({
 		id: inserted.id
 	});
-	t.is(projects[0].name, 'DBRest 0__0');
+	t.is(records[0].col_character, 'Y');
 
-	await Project.delete({
+	await DBRest.delete({
 		id: inserted.id
 	});
 
-	const deletedProject = await Project.find({
+	const deletedRecord = await DBRest.find({
 		id: inserted.id
 	});
-	t.is(deletedProject.length, 0);
+	t.is(deletedRecord.length, 0);
 });
 
 test('Insert with transaction', async t => {
-	const {Project} = dbrest.models;
+	const {DBRest} = dbrest.models;
 
 	const uuid = await dbrest.beginTransaction();
 	const insertions = [];
 
 	try {
-		insertions.push(
-			await Project.insert({
-				name: 'DBRest 1',
-				description: 'Create a REST API from your dataabse models.'
-			}, uuid)
-		);
-
-		insertions.push(
-			await Project.insert({
-				name: 'DBRest 2',
-				description: 'Create a REST API from your dataabse models.'
-			}, uuid)
-		);
-
-		insertions.push(
-			await Project.insert({
-				name: 'DBRest 3',
-				description: 'Create a REST API from your dataabse models.'
-			}, uuid)
-		);
-
+		insertions.push(await DBRest.insert(template, uuid));
 		throw new Error('Transaction control!');
 	} catch (e) {
 		await dbrest.rollbackTransaction(uuid);
 	}
 
-	const projects = await Project.find({
+	const records = await DBRest.find({
 		id: insertions.map(p => p.id)
 	});
-	t.is(projects.length, 0);
+	t.is(records.length, 0);
 });
 
 test.after('Disconnecting to database', async () => {
