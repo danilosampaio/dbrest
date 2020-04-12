@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const Database = require('./lib/database');
-const Model = require('./lib/model');
 const Restify = require('./lib/restify');
 
 /*
@@ -36,13 +35,31 @@ class DBRest {
 		Recursively loads models from 'modelsDir' directory.
 	*/
 	async loadFrom(modelsDir) {
-		const files = fs.readdirSync(modelsDir, 'utf8');
-
+		const files = this.getFiles(modelsDir, [], 'js');
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
-			const Model = require(path.join(modelsDir, file));
+			const Model = require(file);
 			this.loadModel(Model);
 		}
+	}
+
+	/**
+	 * 
+	 * @param {root folder of models files} dir 
+	 * @param {If there are files to be added to the list they need to be inserted in this parameter} files_ 
+	 * @param {the extension of the files to be searched} fileType 
+	 */
+	getFiles(dir, files_, fileType){
+		var regex = fileType ? new RegExp('\\' + fileType + '$') : '';
+		return fs.readdirSync(dir).reduce((allFiles, file) => {
+				var name = path.join(dir, file);
+				if (fs.statSync(name).isDirectory()){					
+					this.getFiles(name, allFiles, fileType);
+				} else if (file.match(regex)){
+						allFiles.push(name);
+				}
+				return allFiles;
+		}, files_ || []);
 	}
 
 	/*
@@ -76,7 +93,4 @@ class DBRest {
 	}
 }
 
-module.exports = {
-	DBRest,
-	Model
-};
+module.exports = DBRest;

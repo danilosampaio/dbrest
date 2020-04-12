@@ -7,8 +7,8 @@
 		"url": "https://github.org/danilosampaio/dbrest"
 	},
 	"repository": {
-		"type" : "git",
-		"url" : "https://github.com/danilosampaio/dbrest.git"
+		"type": "git",
+		"url": "https://github.com/danilosampaio/dbrest.git"
 	},
 	"keywords": [
 		"rest",
@@ -22,14 +22,15 @@
 	"dependencies": {
 		"express": "^4.15.2",
 		"lodash": "^4.17.10",
+		"mysql": "^2.18.1",
 		"pg": "^7.4.3",
 		"tedious": "^2.6.4",
 		"tedious-connection-pool": "^1.0.5"
 	},
 	"devDependencies": {
 		"ava": "^0.25.0",
-		"nyc": "^12.0.2",
 		"codecov": "^3.0.0",
+		"nyc": "^12.0.2",
 		"xo": "^0.22.0"
 	},
 	"engines": {
@@ -46,5 +47,8 @@
 			"text"
 		]
 	},
-	"files": ["index.js","lib"]
+	"files": [
+		"index.js",
+		"lib"
+	]
 }

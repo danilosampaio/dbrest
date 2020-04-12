@@ -1,4 +1,6 @@
-import {DBRest} from 'dbrest';
+const DBRest = require('./index');
+
+const config = require('./dbconfig');
 
 const http = require('http');
 const express = require('express');
@@ -11,8 +13,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 (async () => {
-	try {
-		const dbrest = new DBRest();
+	try {		
+		const dbrest = new DBRest(config.mysql);
+				
 		const router = await dbrest.init();
 		app.use('/', router);
 
